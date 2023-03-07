@@ -45,21 +45,25 @@ class GameRunner():
         res = cur.execute("SELECT * FROM clues WHERE tier = ? ORDER BY random() LIMIT 1", params)
         self.currWord = res[2]
         # return res.fetchone()
+        for p in self.players.values():
+            p.skip = False
         if self.cm is not None:
             self.pingTime = time.time_ns() // 1000
             self.ansTime = None
             self.notLive = False
             msgobj = {type: 'clue', clue: res[3]}
             asyncio.run(self.cm.broadcast(json.dumps(msgobj)))
-    def end_round(self):
+    async def end_round(self):
         # sends the scores
         self.notLive = True
         scores = []
         for p in self.players.values():
+            p.ready = False
             scores.append({p.name: p.score})
         obj = {type: 'end', scores: scores, answer: self.currWord}
-        asyncio.run(self.cm.broadcast(json.dumps(obj)))
-    def dispatch(self, msg, ws, cmgr):
+        await self.cm.broadcast(json.dumps(obj))
+    async def dispatch(self, msg, ws, cmgr):
+        print("in dispatch with ", msg)
         if 'join' in msg:
             name = msg['join']
             if name not in self.players:
@@ -67,42 +71,35 @@ class GameRunner():
                 self.players[name] = pl
                 o = pl.obj()
                 o['type'] = 'join'
-                asyncio.run(self.cm.broadcast(json.dumps(o)))
+                #asyncio.run(self.cm.broadcast(json.dumps(o)))
+                await self.cm.broadcast(json.dumps(o))
         elif 'skip' in msg:
             if self.notLive:
                 return
             # yeah i guess else makes sense here, keep messages from client simple
-            if 'user' not in msg:
+            player = self.get_player(msg)
+            if player is None:
                 return
-            name = msg['user']
-            player = self.players[name]
-            if player:
-                player.skip = True
+            player.skip = True
             for p in self.players.values():
                 if not p.skip:
                     return
             # what to do if all skip? end the round
-            self.end_round(True)
+            await self.end_round(True)
         elif 'pong' in msg:
             if self.notLive:
                 return
-            if 'user' not in msg:
+            p = self.get_player(msg)
+            if p is None:
                 return
-            u = msg['user']
-            if u not in self.players:
-                return
-            p = self.players[u]
             t = time.time_ns() // 1000
             p.ping = min(t - self.pingTime, MAX_PING) # max 3 seconds
         elif 'guess' in msg:
             if self.notLive:
                 return
-            if 'user' not in msg:
+            p = self.get_player(msg)
+            if p is None:
                 return
-            u = msg['user']
-            if u not in self.players:
-                return
-            p = self.players[u]
             p.guess = msg['guess']
             if p.skip:
                 return # given up their right to guess
@@ -111,19 +108,24 @@ class GameRunner():
                 if self.ansTime is None:
                     self.ansTime = ct
                     # have to trigger and end round in a few secs
-                    asyncio.wait(self.end_round, timeout=5)
+                    await asyncio.sleep(5)
+                    await self.end_round()
                     # does any of this even work lol?
                 elif ct - self.ansTime < p.ping:
                     p.score += self.currVal
         elif 'ready' in msg:
-            if !self.NotLive:
+            if not self.NotLive:
                 return
-            if 'user' not in msg:
+            p = self.get_player(msg)
+            if p is None:
                 return
-            u = msg['user']
-            if u not in self.players:
-                return
-                    
+            for pl in self.players.values():
+                if not pl.ready:
+                    return
+            # now everyone ready, time for a new round
+            self.generate_question()
+
+            
 class Player:
     def __init__(self, name):
         self.name = name
