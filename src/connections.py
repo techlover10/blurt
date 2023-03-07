@@ -29,13 +29,15 @@ class ConnectionManager:
             await asyncio.Future()
     def start_server(self):
         asyncio.run(self._start_server())
-    def dispatch(self,msg):
-        self.df(msg, self)
+    def dispatch(self,msg,ws):
+        self.df(msg, ws, self)
     async def consumer(self, ws):
         async for message in ws:
             jm = json.loads(message)
             print(jm)
-            self.dispatch(jm)
+            if 'join' in jm:
+                print("joined: ", jm['join'])
+            self.dispatch(jm, ws)
             await self.broadcast(json.dumps(jm))
     async def producer(self, ws):
         # pls don't use
