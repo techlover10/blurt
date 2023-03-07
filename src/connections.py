@@ -34,11 +34,8 @@ class ConnectionManager:
     async def consumer(self, ws):
         async for message in ws:
             jm = json.loads(message)
-            print(jm)
-            if 'join' in jm:
-                print("joined: ", jm['join'])
             self.dispatch(jm, ws)
-            await self.broadcast(json.dumps(jm))
+            await self.broadcast(json.dumps(jm)) # do i want this last one for debug? phaps
     async def producer(self, ws):
         # pls don't use
         while True:

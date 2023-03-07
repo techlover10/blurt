@@ -27,6 +27,14 @@ class GameRunner():
         self.players = {}
         self.pingTime = None
         self.ansTime = None
+    def get_player(self, msg):
+        if 'user' not in msg:
+            return None
+        u = msg['user']
+        if u not in self.players:
+            return None
+        p = self.players[u]
+        return p
     def generate_question(self):
         # assuming roll is same as tier for now
         self.currVal = random.randint(1,self.maxVal)
@@ -107,6 +115,14 @@ class GameRunner():
                     # does any of this even work lol?
                 elif ct - self.ansTime < p.ping:
                     p.score += self.currVal
+        elif 'ready' in msg:
+            if !self.NotLive:
+                return
+            if 'user' not in msg:
+                return
+            u = msg['user']
+            if u not in self.players:
+                return
                     
 class Player:
     def __init__(self, name):
@@ -115,5 +131,6 @@ class Player:
         self.ping = MAX_PING
         self.guess = None
         self.skip = False
+        self.ready = False
     def obj(self):
         return {'name': self.name, 'score': self.score}
