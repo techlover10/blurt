@@ -25,12 +25,13 @@ class GameManager {
 								document.getElementById('ready').hidden = true;
 								document.getElementById('ans').hidden = true;
 								document.getElementById('guessr').hidden = false;
+								document.getElementById('guesses').hidden = false;
 								console.log('clue handling part, ', dat);
 								// note that ping is supposed to happen here too...
 								let o = {'pong': 1, user: self.name};
 								self.sock.send(JSON.stringify(o));
 								let elt = document.getElementById('clue');
-								elt.textContent = dat['clue']
+								elt.textContent = "(" + dat['value'] + ") " + dat['clue']
 						}
 						else if(t == 'end') {
 								document.getElementById('skip').hidden = true;
@@ -39,6 +40,7 @@ class GameManager {
 								let ans = dat['answer'];
 								document.getElementById('ans').textContent = ans;
 								document.getElementById('ans').hidden = false;
+								document.getElementById('guesses').hidden = true;
 								console.log('end of round, ', dat);
 								let sc = dat['scores'];
 								let elt = document.getElementById('scores');
@@ -56,7 +58,7 @@ class GameManager {
 								document.getElementById('pp').hidden = false;
 								document.getElementById('clue').hidden = false;
 								document.getElementById('scores').hidden = false;
-								//document.getElementById('guesses').hidden = false;
+								document.getElementById('guesses').hidden = false;
 						}
 						else if(t == 'scores') {
 								//console.log(dat)
@@ -87,6 +89,8 @@ class GameManager {
 				this.sock.send(JSON.stringify(obj));
 		}
 		ready() {
+				let gs = document.getElementById('guesses');
+				gs.replaceChildren();
 				let obj = {ready: 1, user: this.name};
 				this.sock.send(JSON.stringify(obj));
 		}
@@ -111,6 +115,7 @@ function loadit() {
 		let sbox = document.getElementById('skip');
 		let gform = document.getElementById('guessr')
 		let gbox = document.getElementById('guess');
+		let gs = document.getElementById('guesses');
 		nform.onsubmit = e => {
 				e.preventDefault();
 				let name = nbox.value;
@@ -119,6 +124,10 @@ function loadit() {
 		gform.onsubmit = e => {
 				e.preventDefault();
 				let name = gbox.value;
+				let c = document.createElement('div');
+				c.textContent = name;
+				gs.appendChild(c);
+				gbox.value = ""
 				gm.guess(name);
 		}
  		rbox.onclick = e => {
