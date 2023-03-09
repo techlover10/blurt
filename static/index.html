@@ -2,11 +2,27 @@
 <meta charset="utf-8">
 <html>
   <head>
-    <script src="rain.js"></script>
+    <script src="game.js"></script>
     <link href="style.css" rel="stylesheet" type="text/css" />
     <title>BLURT</title>
+		<link rel="icon" type="image/png" href="icn.png"/>
   </head>
   <body>
-    <div>hihihihi</div>
+		<div id="nd">
+			<form id="namer">
+				<input type="text" id="name" name="name">
+			</form>
+		</div>
+		<div id="pp" hidden>
+			<input type="button" id="ready" value="ready">
+			<input type="button" id="skip" value="skip">
+			<form id="guessr">
+				<input type="text" id="guess">
+			</form>
+		</div>
+		<div id="clue" hidden></div>
+		<div id="ans" hidden></div>
+		<div id="scores" hidden></div>
+		<div id="guesses" hidden></div>
   </body>
 </html>

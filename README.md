@@ -17,3 +17,10 @@ to join the game (or rejoin the game), client sends stringified json of the form
 `{"join": "<username>"}`. As long as one person has a live connection the current game will maintain, when everyone drops the game is tossed and a new game is started when new clients connect
 
 The die roll and everything is done by the server. The server gives out the question, and when the client recieves it sends back an acknowledgement for latency measuring purposes.
+
+
+--------
+
+notes on word lists:
+
+SAT words, from https://www.vocabulary.com/lists/191545

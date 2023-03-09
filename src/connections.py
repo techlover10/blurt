@@ -16,9 +16,10 @@ connections = set()
 currGame = None
 
 class ConnectionManager:
-    def __init__(self, dispatch=None):
+    def __init__(self, dispatch=None, emptier=None):
         if dispatch:
             self.df = dispatch
+            self.emptier = emptier # this is when there's nobody left in the room...
         else:
             def emptydf(x,y):
                 pass
@@ -53,6 +54,8 @@ class ConnectionManager:
         finally:
             print("drop conn")
             self.connections.remove(ws)
+            if not self.connections: # kinda hate this... `not <set>` is same as empty check...
+                self.emptier()
     async def broadcast(self,msg):
         websockets.broadcast(self.connections, msg)
 
