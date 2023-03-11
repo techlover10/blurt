@@ -86,10 +86,10 @@ class GameRunner():
                 #asyncio.run(self.cm.broadcast(json.dumps(o)))
                 plrs = [p.obj() for p in self.players.values()]
                 po = {'scores': plrs, 'type': 'scores'}
-                await ws.send(json.dumps(po))
+                #await ws.send(json.dumps(po))
                 po2 = {'type':'reg'}
                 await ws.send(json.dumps(po2))
-                await self.cm.broadcast(json.dumps(o))
+                await self.cm.broadcast(json.dumps(po))
         elif 'skip' in msg:
             if self.notLive:
                 return
@@ -119,7 +119,7 @@ class GameRunner():
             if p is None:
                 return
             p.guess = msg['guess']
-            if p.skip:
+            if p.skip: # am I sure that i want this?
                 return # given up their right to guess
             if p.guess == self.currWord:
                 ct = time.time_ns() // 1000
@@ -134,6 +134,10 @@ class GameRunner():
                     # does any of this even work lol?
                 elif ct - self.ansTime < p.ping:
                     p.score += self.currVal
+            # now send to everyone
+            o = {'guess': msg['guess'], 'type': 'guess', 'name': p.name}
+            await asyncio.sleep(0.5)
+            await self.cm.broadcast(json.dumps(o))
         elif 'ready' in msg:
             if not self.notLive:
                 print('not ready')

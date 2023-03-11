@@ -26,6 +26,7 @@ class GameManager {
 								document.getElementById('ans').hidden = true;
 								document.getElementById('guessr').hidden = false;
 								document.getElementById('guesses').hidden = false;
+								document.getElementById('guesses').replaceChildren();
 								console.log('clue handling part, ', dat);
 								// note that ping is supposed to happen here too...
 								let o = {'pong': 1, user: self.name};
@@ -40,7 +41,7 @@ class GameManager {
 								let ans = dat['answer'];
 								document.getElementById('ans').textContent = ans;
 								document.getElementById('ans').hidden = false;
-								document.getElementById('guesses').hidden = true;
+								//document.getElementById('guesses').hidden = true;
 								console.log('end of round, ', dat);
 								let sc = dat['scores'];
 								let elt = document.getElementById('scores');
@@ -70,8 +71,12 @@ class GameManager {
 										d.textContent = s['name'] + ": " + s['score'];
 										elt.appendChild(d);
 								}
-
-
+						}
+						else if(t == 'guess') {
+								let gs = document.getElementById('guesses');
+								let d = document.createElement('div');
+								d.textContent = dat['name'] + " guessed " + dat['guess'];
+								gs.appendChild(d);
 						}
 						else {
 								console.log('unhandled, ', dat)
@@ -124,9 +129,6 @@ function loadit() {
 		gform.onsubmit = e => {
 				e.preventDefault();
 				let name = gbox.value;
-				let c = document.createElement('div');
-				c.textContent = name;
-				gs.appendChild(c);
 				gbox.value = ""
 				gm.guess(name);
 		}
