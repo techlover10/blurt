@@ -1,5 +1,25 @@
 # blurt
 
+TO RUN (jwonggg):
+```
+git clone <this repo>
+cd <this repo>
+python3 -m venv .
+source bin/activate
+pip install -r requirements.txt
+sqlite3 data.db < schema.sql
+sqlite3 data.db < init.sql
+python src/runner.py &
+cd static
+python -m http.server
+```
+
+or whatever the windows versions of all that is
+
+this should get you started at `localhost:8000`
+
+
+
 the whole of the game is conducted through websocket messages
 
 
