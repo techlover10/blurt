@@ -118,7 +118,7 @@ class GameRunner():
             p = self.get_player(msg)
             if p is None:
                 return
-            p.guess = msg['guess']
+            p.guess = msg['guess'].lower()
             if p.skip: # am I sure that i want this?
                 return # given up their right to guess
             if p.guess == self.currWord:
@@ -135,7 +135,7 @@ class GameRunner():
                 elif ct - self.ansTime < p.ping:
                     p.score += self.currVal
             # now send to everyone
-            o = {'guess': msg['guess'], 'type': 'guess', 'name': p.name}
+            o = {'guess': p.guess, 'type': 'guess', 'name': p.name}
             await asyncio.sleep(0.5)
             await self.cm.broadcast(json.dumps(o))
         elif 'ready' in msg:
