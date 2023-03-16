@@ -7,5 +7,5 @@
 #
 
 
-sqlite3 data.db < schema.sql
-sqlite3 data.db < init.sql
+sqlite3 src/data.db < schema.sql
+sqlite3 src/data.db < init.sql
