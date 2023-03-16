@@ -1,6 +1,23 @@
 import gamestate
 import connections
 
+import multiprocessing
+
+import http.server
+import socketserver
+import os
+
+PORT = 8000
+
+def serve_static():
+    web_dir = os.path.join(os.path.dirname(__file__), '../static')
+    os.chdir(web_dir)
+
+    Handler = http.server.SimpleHTTPRequestHandler
+    httpd = socketserver.TCPServer(("", PORT), Handler)
+    print("serving static files at port", PORT)
+    httpd.serve_forever()
+
 
 
 def run():
@@ -14,4 +31,6 @@ def run():
 
 
 if __name__ == "__main__":
+    process = multiprocessing.Process(target=serve_static)
+    process.start()
     run()

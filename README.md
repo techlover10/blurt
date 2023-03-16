@@ -1,3 +1,24 @@
+# Blurt
+
+## Preparing development environment (Linux/WSL)
+```
+git clone <this repo>
+cd <this repo>
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements.txt
+./pre_init.sh
+```
+
+To run, simply execute 
+```
+./dev_server.sh
+```
+This will start a server at localhost:8000.
+
+
+# old directions
+
 # blurt
 
 TO RUN (jwonggg):
