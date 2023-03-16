@@ -1,5 +1,6 @@
 <!doctype html>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <html>
     <head>
         <!-- Imported base-level Bootstrap CSS styles -->
@@ -7,7 +8,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
         <!-- Custom fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-	<script src="https://kit.fontawesome.com/edaaac6a01.js" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/edaaac6a01.js" crossorigin="anonymous"></script>
 
         <script src="game.js"></script>
         <link href="style.css" rel="stylesheet" type="text/css" />
@@ -17,12 +18,12 @@
     <body>
         <div class="container">
             <div class="row mt-4">
-                <div class="col-12 col-md-3 ml-auto mr-auto">
-                    <h1 class="banner"> Blurt </h1>
+                <div class="col-12 col-md-3 ms-auto me-auto">
+                    <h1 class="banner text-center"> Blurt </h1>
                 </div>
             </div>
             <div class="row mt-2">
-                <div class="col-12 col-md-4 ml-auto mr-auto">
+                <div class="col-12 col-md-4 ms-auto me-auto">
                     <div id="nd">
                         <form id="namer" autocomplete="off">
                             <div class="form-group">
@@ -30,25 +31,41 @@
                                 <input type="text" class="form-control mt-2 mb-2" id="name" name="name" placeholder="Pick a name!">
                                 <small class="form-text text-muted">Enter the name you wish to display on the screen.  Press enter or click submit to continue.</small>
                             </div>
-                            <button type="submit" class="btn btn-lg btn-primary mt-4">Enter!</button>
+                            <div class="row">
+                                <div class="col col-6 ms-auto me-auto text-center">
+                            <button type="submit" class="btn btn-lg btn-primary btn-block mt-4">Enter!</button>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
             </div>
-            <div id="pp" hidden>
-		    <button type="submit" class="btn btn-success btn-xl" id="ready" value="ready"> <i class="fa-solid fa-check"></i> Ready!</button>
-		    <button type="submit" id="skip" class="btn btn-warning btn-xl" value="skip"><i class="fa-solid fa-forward"></i> Skip!</button>
-                <form id="guessr" autocomplete="off">
-			<div class="form-group">
-				<input class="form-control mt-2 mb-2" type="text" id="guess" placeholder="Enter your guess...">
-				<button type="submit" class="btn btn-lg btn-primary mt-4"><i class="fa-solid fa-paper-plane-top"></i>Guess!</button>
-			</div>
-                </form>
+            <div id="ans" class="answer-container" hidden></div>
+            <div class="row">
+                <div class="col-12 col-md-7 order-md-2">
+                    <div id="pp" class="main-game-box" hidden>
+                        <div id="ready" class="ready-overlay">
+                            <button type="submit" class="btn btn-success btn-xl" value="ready"> <i class="fa-solid fa-check"></i> Ready!</button>
+                        </div>
+                        <div class="question-display">
+                            <button type="submit" id="skip" class="btn btn-warning btn-xl" value="skip"><i class="fa-solid fa-forward"></i> Skip!</button>
+                            <div id="clue" hidden></div>
+                        </div>
+                        <form id="guessr" autocomplete="off">
+                            <div class="form-group">
+                                <input class="form-control mt-2 mb-2" type="text" id="guess" placeholder="Enter your guess...">
+                                <button type="submit" class="btn btn-lg btn-primary mt-4"><i class="fa-solid fa-paper-plane-top"></i>Guess!</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-6 col-md-2 order-md-1">
+                    <div id="guesses" hidden></div>
+                </div>
+                <div class="col-6 col-md-2 order-md-3">
+                    <div id="scores" hidden class="scores-block"></div>
+                </div>
             </div>
-            <div id="clue" hidden></div>
-            <div id="ans" hidden></div>
-            <div id="scores" hidden class="scores-block"></div>
-            <div id="guesses" hidden></div>
         </div>
     </body>
 </html>
