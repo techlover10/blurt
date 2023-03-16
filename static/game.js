@@ -68,7 +68,8 @@ class GameManager {
 								elt.replaceChildren();
 								for(let s of sc) {
 										let d = document.createElement('div');
-										d.textContent = s['name'] + ": " + s['score'];
+										d.classList.add("score-entry");
+										d.innerHTML = '<div class="username">' + s['name'] + '</div><div class="user-score">' + s['score'] + '</div>';
 										elt.appendChild(d);
 								}
 						}

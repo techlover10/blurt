@@ -1,5 +1,35 @@
 h1.banner{
-    font-family: Roboto;
-    font-weight:800;
-    letter-spacing:5px;
+	font-family: Roboto;
+	font-weight:800;
+	letter-spacing:5px;
+}
+
+.scores-block{
+	margin-top:10px;
+}
+.score-entry{
+	padding: 15px;
+	background: #dfdfdf;
+	border-radius: 10px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	box-shadow: 0 0 9px 5px #c3c3c3;
+	display:inline-block;
+}
+
+.username{
+	font-weight:600;
+	font-size:18px;
+	text-align:center;
+	background-color:green;
+	padding:6px;
+	border-radius:4px;
+	color:white;
+	margin-bottom:4px;
+}
+.user-score{
+	text-align:center;
+	font-size:30px;
+	font-weight:400;
+
 }
