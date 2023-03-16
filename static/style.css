@@ -56,7 +56,7 @@ h1.banner{
 .point-value{
         position: absolute;
     top: -8px;
-    left: -13px;
+    left: -10px;
     background: white;
     padding: 4px 10px;
     border-radius: 100%;
@@ -94,7 +94,7 @@ h1.banner{
     position: absolute;
     border-radius: 15px;
     top: -20px;
-    left: -30px;
+    left: 5px;
     box-shadow: 0px 0px 3px 2px #00000045;
 }
 .guess{
@@ -114,8 +114,8 @@ h1.banner{
     padding: 2px 10px;
     position: absolute;
     border-radius: 15px;
-    top: -20px;
-    left: -30px;
+    top: -38px;
+    left: 5px;
     box-shadow: 0px 0px 3px 2px #00000045;
     font-size: 30px;
     color: white;
