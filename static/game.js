@@ -1,7 +1,7 @@
 
 
-HOST = 'ws://localhost:8765'
-
+//HOST = 'ws://localhost:8765'
+HOST = 'wss://' + window.location.hostname + '/api/'
 
 var gm = null;
 

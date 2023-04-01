@@ -16,10 +16,12 @@ connections = set()
 currGame = None
 
 class ConnectionManager:
-    def __init__(self, dispatch=None, emptier=None):
+    def __init__(self, dispatch=None, emptier=None, leaver=None):
+        self.id_counter = 0
         if dispatch:
             self.df = dispatch
             self.emptier = emptier # this is when there's nobody left in the room...
+            self.leaver = leaver
         else:
             def emptydf(x,y):
                 pass
@@ -31,7 +33,8 @@ class ConnectionManager:
     def start_server(self):
         asyncio.run(self._start_server())
     async def dispatch(self,msg,ws):
-        await self.df(msg, ws, self)
+        if self.df:
+            await self.df(msg, ws, self)
     async def consumer(self, ws):
         async for message in ws:
             jm = json.loads(message)
@@ -44,7 +47,10 @@ class ConnectionManager:
             await ws.send(msg)
     async def register(self,ws):
         print("new reg")
+        self.id_counter += 1
+        ws._cm_id = self.id_counter
         print(ws)
+        #print(dir(ws))
         self.connections.add(ws)
         asyncio.gather(
             self.consumer(ws)
@@ -53,6 +59,8 @@ class ConnectionManager:
             await ws.wait_closed()
         finally:
             print("drop conn")
+            old_id = ws._cm_id
+            await self.leaver(old_id)
             self.connections.remove(ws)
             if not self.connections: # kinda hate this... `not <set>` is same as empty check...
                 self.emptier()

@@ -28,6 +28,7 @@ class GameRunner():
         self.players = {}
         self.pingTime = None
         self.ansTime = None
+        self.deadPlayers = {}
     def get_player(self, msg):
         if 'user' not in msg:
             return None
@@ -65,6 +66,34 @@ class GameRunner():
         obj = {'type': 'end', 'scores': scores, 'answer': self.currWord}
         #await self.cm.broadcast(json.dumps(obj))
         return obj
+    async def leaver(self, idno):
+        print(str(idno) + " has left")
+        theplayer = None
+        for p in self.players.values():
+            if p.idno == idno:
+                theplayer = p
+        if theplayer:
+            print(theplayer.name + " has left")
+            self.deadPlayers[theplayer.name] = theplayer
+            del self.players[theplayer.name]
+        # now check readys
+        if self.notLive:
+            allReady = True
+            for p in self.players.values():
+                if not p.ready:
+                    allReady = False
+            if allReady:
+                q = self.generate_question()
+                print(q)
+                await self.cm.broadcast(json.dumps(q))
+        else:
+            allSkip = True
+            for p in self.players.values():
+                if not p.skip:
+                    allSkip = False
+            if allSkip:
+                obj = self.end_round()
+                await self.cm.broadcast(json.dumps(obj))
     def emptier(self):
         # essentially a soft reset
         print("emptying")
@@ -78,8 +107,8 @@ class GameRunner():
         print("in dispatch with ", msg)
         if 'join' in msg:
             name = msg['join']
-            if name not in self.players:
-                pl = Player(name)
+            if name not in self.players and name not in self.deadPlayers:
+                pl = Player(name, ws._cm_id)
                 self.players[name] = pl
                 o = pl.obj()
                 o['type'] = 'join'
@@ -90,6 +119,16 @@ class GameRunner():
                 po2 = {'type':'reg'}
                 await ws.send(json.dumps(po2))
                 await self.cm.broadcast(json.dumps(po))
+            elif name in self.deadPlayers:
+                self.players[name] = self.deadPlayers[name]
+                self.players[name].idno = ws._cm_id
+                del self.deadPlayers[name]
+                po2 = {'type':'reg'}
+                await ws.send(json.dumps(po2))
+            else:
+                self.players[name].idno = ws._cm_id
+                po2 = {'type':'reg'}
+                await ws.send(json.dumps(po2))
         elif 'skip' in msg:
             if self.notLive:
                 return
@@ -124,6 +163,9 @@ class GameRunner():
             if p.guess == self.currWord:
                 ct = time.time_ns() // 1000
                 if self.ansTime is None:
+                    # i can just tell the guesser they got it right immediately
+                    rightobj = {'type': 'right'}
+                    await ws.send(json.dumps(rightobj))
                     p.score += self.currVal
                     self.ansTime = ct
                     # have to trigger and end round in a few secs
@@ -134,6 +176,8 @@ class GameRunner():
                     # does any of this even work lol?
                 elif ct - self.ansTime < p.ping:
                     p.score += self.currVal
+                    rightobj = {'type': 'right'}
+                    await ws.send(json.dumps(rightobj))
             # now send to everyone
             o = {'guess': p.guess, 'type': 'guess', 'name': p.name}
             await asyncio.sleep(0.5)
@@ -165,8 +209,9 @@ class GameRunner():
             await self.cm.broadcast(json.dumps(q));
             
 class Player:
-    def __init__(self, name):
+    def __init__(self, name, idno):
         self.name = name
+        self.idno = idno
         self.score = 0
         self.ping = MAX_PING
         self.guess = None
