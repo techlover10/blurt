@@ -207,7 +207,10 @@ class GameRunner():
         elif 'forceready' in msg:
             q = self.generate_question()
             await self.cm.broadcast(json.dumps(q));
-            
+        elif 'forceskip' in msg:
+            obj = self.end_round()
+            await self.cm.broadcast(json.dumps(obj))
+
 class Player:
     def __init__(self, name, idno):
         self.name = name
