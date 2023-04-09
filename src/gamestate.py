@@ -11,7 +11,7 @@ def reload():
     importlib.reload(sys.modules[__name__])
 
 
-MAX_TIER = 3
+MAX_TIER = 4
 MAX_PING = 3000
 
 
@@ -20,7 +20,7 @@ class GameRunner():
         self.cm = cm # the connection manager, for broadcast mostly
         self.dbc = sqlite3.connect(dbfile) # idk the path to the words database
         # prolly not an efficient way of doing this (for db), but queries are pretty rare tbqh
-        self.maxVal = 3 # potentially alterable
+        self.maxVal = MAX_TIER # potentially alterable
 
         self.notLive = True
         self.currWord = None
