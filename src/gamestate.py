@@ -137,6 +137,8 @@ class GameRunner():
             if player is None:
                 return
             player.skip = True
+            ob = {'type':'skip', 'name': player.name} # HERE
+            await self.cm.broadcast(json.dumps(ob))
             for p in self.players.values():
                 if not p.skip:
                     return
@@ -158,8 +160,6 @@ class GameRunner():
             if p is None:
                 return
             p.guess = msg['guess'].lower()
-            if p.skip: # am I sure that i want this?
-                return # given up their right to guess
             if p.guess == self.currWord:
                 ct = time.time_ns() // 1000
                 if self.ansTime is None:

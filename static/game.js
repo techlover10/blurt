@@ -77,6 +77,15 @@ class GameManager {
                     elt.appendChild(d);
                 }
             }
+						else if(t == 'skip') {
+								console.log('skippa')
+								let namedivs = document.querySelectorAll(".username")
+								for(let d of namedivs) {
+										if(d.textContent == dat['name']) {
+												d.textContent = dat['name'] + "*";
+										}
+								}
+						}
             else if(t == 'guess') {
                 let gs = document.getElementById('guesses');
                 let d = document.createElement('div');
