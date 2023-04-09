@@ -61,6 +61,7 @@ class GameManager {
                 document.getElementById('clue').hidden = false;
                 document.getElementById('scores').hidden = false;
                 document.getElementById('guesses').hidden = false;
+								document.getElementById('logo').hidden = false;
             }
 						else if(t == 'right') {
 								document.getElementById('correct').hidden = false;
