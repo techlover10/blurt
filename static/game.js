@@ -90,7 +90,7 @@ class GameManager {
                 let gs = document.getElementById('guesses');
                 let d = document.createElement('div');
                 d.innerHTML = '<div class="guess-entry"><div class="guesser">' + dat['name'] + ' guessed...</div><div class="guess">' + dat['guess'] + '</div></div>';
-                gs.appendChild(d);
+                gs.prepend(d);
             }
             else {
                 console.log('unhandled, ', dat)
