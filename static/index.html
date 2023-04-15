@@ -82,6 +82,7 @@
                     <div id="scores" class="scores-block" data-bind="visible: gameState() != 'init'">
                         <div class="score-entry" data-bind="foreach: scoresList">
                         <div class="username" data-bind="text: name"></div><div class="user-score" data-bind="text: score"></div>
+                        <div class="skip-indicator" data-bind="visible: userDidSkip"></div>
                         </div>
                     </div>
                 </div>

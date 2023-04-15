@@ -58,7 +58,20 @@ var GameViewModel = function() {
         this.scoresList.removeAll();
         for (let s of scoresArr)
         {
-            thisViewModel.scoresList.push(s);
+            this.scoresList.push({
+                name: s.name,
+                score: s.score,
+                userDidSkip: false
+            });
+        }
+    }
+
+    this.setUserSkipped = function(username)
+    {
+        var targetUser = ko.utils.arrayFirst(this.scoresList(), function(player){ return player.name == username; });
+        if (targetUser)
+        {
+            targetUser.userDidSkip = true;
         }
     }
 

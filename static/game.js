@@ -44,13 +44,7 @@ class GameManager {
                 thisViewModel.updateScores(dat.scores);
             }
             else if(t == 'skip') {
-                console.log('skippa')
-                let namedivs = document.querySelectorAll(".username")
-                for(let d of namedivs) {
-                    if(d.textContent == dat['name']) {
-                        d.textContent = dat['name'] + "*";
-                    }
-                }
+                setUserSkipped(dat.name);
             }
             else if(t == 'guess') {
                 thisViewModel.guessesList.push({
