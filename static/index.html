@@ -5,12 +5,15 @@
     <head>
         <!-- Imported base-level Bootstrap CSS styles -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+        <!-- View model -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
         <!-- Custom fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
         <script src="https://kit.fontawesome.com/edaaac6a01.js" crossorigin="anonymous"></script>
 
         <script src="game.js"></script>
+        <script src="frontend.js"></script>
         <link href="style.css" rel="stylesheet" type="text/css" />
         <title>PROFLIGATE</title>
         <link rel="icon" type="image/png" href="icn.png"/>
@@ -19,39 +22,43 @@
         <div class="container">
             <div class="row mt-4">
                 <div class="col-12 col-md-3 ms-auto me-auto">
-										<img src="logo.svg" id="logo">
-                    <h1 class="banner text-center"> Profligate </h1>
+                    <img src="logo.svg" id="logo">
                 </div>
             </div>
             <div class="row mt-2">
                 <div class="col-12 col-md-4 ms-auto me-auto">
-                    <div id="nd">
+                    <div id="loginForm" data-bind="visible: gameState() == 'init'">
                         <form id="namer" autocomplete="off">
                             <div class="form-group">
                                 <label for="name">Screen Name</label>
                                 <input type="text" class="form-control mt-2 mb-2" id="name" name="name" placeholder="Pick a name!">
-                                <small class="form-text text-muted">Enter the name you wish to display on the screen.  Press enter or click submit to continue.</small>
+                                <small class="form-text text-muted">Enter the name you wish to display on the screen.  Press enter or click the button to continue.</small>
                             </div>
                             <div class="row">
                                 <div class="col col-6 ms-auto me-auto text-center">
-                            <button type="submit" class="btn btn-lg btn-primary btn-block mt-4">Enter!</button>
+                                    <button type="submit" class="btn btn-lg btn-primary btn-block mt-4">Enter!</button>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
-            <div id="ans" class="answer-container" hidden></div>
-						<div id="correct" hidden>✓</div>
+            <div id="ans" class="answer-container" data-bind="visible: gameState() == 'turnended'">
+                <div class="answer-banner">Answer:</div><div class="answer-text" data-bind='text: currentAnswer'></div>
+            </div>
+            <div id="correct" data-bind="visible: gameState() == 'wonpoint'">✓</div>
             <div class="row">
                 <div class="col-12 col-md-7 order-md-2">
-                    <div id="pp" class="main-game-box" hidden>
-                        <div id="ready" class="ready-overlay">
+                    <div id="mainGameBox" class="main-game-box" data-bind="visible: gameState() != 'init'">
+                        <div id="ready" class="ready-overlay" data-bind="visible: waitingForUserConfirm()">
                             <button type="submit" class="btn btn-success btn-xl" value="ready"> <i class="fa-solid fa-check"></i> Ready!</button>
                         </div>
                         <div class="question-display">
-                            <button type="submit" id="skip" class="btn btn-warning btn-xl" value="skip"><i class="fa-solid fa-forward"></i> Skip!</button>
-                            <div id="clue" hidden></div>
+                            <button type="submit" id="skip" class="btn btn-warning btn-xl" value="skip" data-bind="visible: showSkipButton()"><i class="fa-solid fa-forward"></i> Skip!</button>
+                            <div id="clue" data-bind="visible: gameState() != 'init'">
+                                <div class="point-value">Points: <span data-bind="text: currentPointVal"></span></div>
+                                <div class="clue-text" data-bind="text: currentClue"></div>
+                            </div>
                         </div>
                         <form id="guessr" autocomplete="off">
                             <div class="form-group">
@@ -62,10 +69,21 @@
                     </div>
                 </div>
                 <div class="col-6 col-md-2 order-md-1">
-                    <div id="guesses" hidden></div>
+                    <div id="guesses" data-bind="visible: gameState() != 'init'">
+                        <div data-bind="foreach: guessesList">
+                            <div class="guess-entry">
+                                <div class="guesser"><span data-bind="text: name "></span> guessed...</div>
+                                <div class="guess" data-bind="text: guess"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-6 col-md-2 order-md-3">
-                    <div id="scores" hidden class="scores-block"></div>
+                    <div id="scores" class="scores-block" data-bind="visible: gameState() != 'init'">
+                        <div class="score-entry" data-bind="foreach: scoresList">
+                        <div class="username" data-bind="text: name"></div><div class="user-score" data-bind="text: score"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

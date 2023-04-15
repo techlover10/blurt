@@ -21,62 +21,27 @@ class GameManager {
             console.log(dat);
             let t = dat['type'];
             if(t == 'clue') {
-                document.getElementById('skip').hidden = false;
-                document.getElementById('ready').hidden = true;
-                document.getElementById('ans').hidden = true;
-                document.getElementById('guessr').hidden = false;
-                document.getElementById('guesses').hidden = false;
-                document.getElementById('guesses').replaceChildren();
+                thisViewModel.startRound();
                 console.log('clue handling part, ', dat);
                 // note that ping is supposed to happen here too...
                 let o = {'pong': 1, user: self.name};
                 self.sock.send(JSON.stringify(o));
-                let elt = document.getElementById('clue');
-                elt.innerHTML  = '<div class="point-value">Points: '+ dat['value'] + '</div>' + '<div class="clue-text">' + dat['clue'] + '</div>';
+                thisViewModel.setClue(dat.clue, dat.value);
             }
             else if(t == 'end') {
-                document.getElementById('skip').hidden = true;
-                document.getElementById('ready').hidden = false;
-                document.getElementById('guessr').hidden = true;
-                let ans = dat['answer'];
-                document.getElementById('ans').innerHTML = '<div class="answer-banner">Answer:</div><div class="answer-text">' + ans + '</div>';
-                document.getElementById('ans').hidden = false;
-                //document.getElementById('guesses').hidden = true;
+                thisViewModel.terminateRound(dat.answer);
+                thisViewModel.waitingForUserConfirm(true);
                 console.log('end of round, ', dat);
-                let sc = dat['scores'];
-                let elt = document.getElementById('scores');
-                elt.replaceChildren();
-                for(let s of sc) {
-                    let d = document.createElement('div');
-                    d.classList.add("score-entry");
-                    d.innerHTML = '<div class="username">' + s['name'] + '</div><div class="user-score">' + s['score'] + '</div>';
-                    elt.appendChild(d);
-                }
+                thisViewModel.updateScores(dat.scores);
             }
             else if(t == 'reg') {
-                console.log('hihi')
-                // hide/show relevant divs
-                document.getElementById('nd').hidden = true;
-                document.getElementById('pp').hidden = false;
-                document.getElementById('clue').hidden = false;
-                document.getElementById('scores').hidden = false;
-                document.getElementById('guesses').hidden = false;
-                document.getElementById('logo').hidden = false;
+                thisViewModel.proceedToWait();
             }
             else if(t == 'right') {
-                document.getElementById('correct').hidden = false;
+                thisViewModel.wonPoint();
             }
             else if(t == 'scores') {
-                //console.log(dat)
-                let sc = dat['scores'];
-                let elt = document.getElementById('scores');
-                elt.replaceChildren();
-                for(let s of sc) {
-                    let d = document.createElement('div');
-                    d.classList.add("score-entry");
-                    d.innerHTML = '<div class="username">' + s['name'] + '</div><div class="user-score">' + s['score'] + '</div>';
-                    elt.appendChild(d);
-                }
+                thisViewModel.updateScores(dat.scores);
             }
             else if(t == 'skip') {
                 console.log('skippa')
@@ -88,10 +53,10 @@ class GameManager {
                 }
             }
             else if(t == 'guess') {
-                let gs = document.getElementById('guesses');
-                let d = document.createElement('div');
-                d.innerHTML = '<div class="guess-entry"><div class="guesser">' + dat['name'] + ' guessed...</div><div class="guess">' + dat['guess'] + '</div></div>';
-                gs.prepend(d);
+                thisViewModel.guessesList.push({
+                    name: dat.name,
+                    guess: dat.guess
+                });
             }
             else {
                 console.log('unhandled, ', dat)
@@ -109,10 +74,8 @@ class GameManager {
         this.sock.send(JSON.stringify(obj));
     }
     ready() {
-        let gs = document.getElementById('guesses');
         let righto = document.getElementById('correct');
         righto.hidden = true;
-        gs.replaceChildren();
         let obj = {ready: 1, user: this.name};
         this.sock.send(JSON.stringify(obj));
     }
@@ -151,6 +114,7 @@ function loadit() {
     }
     rbox.onclick = e => {
         gm.ready();
+        thisViewModel.waitingForUserConfirm(false);
     }
     sbox.onclick = e => {
         gm.skip();
@@ -158,4 +122,3 @@ function loadit() {
 }
 
 
-window.onload = loadit;
