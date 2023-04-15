@@ -25,7 +25,7 @@ def run():
     cm = connections.ConnectionManager(gs.dispatch)
     gs.cm = cm
     cm.emptier = gs.emptier
-
+    cm.leaver = gs.leaver
     cm.start_server()
 
 
