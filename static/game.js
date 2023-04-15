@@ -61,10 +61,10 @@ class GameManager {
                 document.getElementById('clue').hidden = false;
                 document.getElementById('scores').hidden = false;
                 document.getElementById('guesses').hidden = false;
-		document.getElementById('logo').hidden = false;
+                document.getElementById('logo').hidden = false;
             }
-	    else if(t == 'right') {
-	        document.getElementById('correct').hidden = false;
+            else if(t == 'right') {
+                document.getElementById('correct').hidden = false;
             }
             else if(t == 'scores') {
                 //console.log(dat)
@@ -78,15 +78,15 @@ class GameManager {
                     elt.appendChild(d);
                 }
             }
-						else if(t == 'skip') {
-								console.log('skippa')
-								let namedivs = document.querySelectorAll(".username")
-								for(let d of namedivs) {
-										if(d.textContent == dat['name']) {
-												d.textContent = dat['name'] + "*";
-										}
-								}
-						}
+            else if(t == 'skip') {
+                console.log('skippa')
+                let namedivs = document.querySelectorAll(".username")
+                for(let d of namedivs) {
+                    if(d.textContent == dat['name']) {
+                        d.textContent = dat['name'] + "*";
+                    }
+                }
+            }
             else if(t == 'guess') {
                 let gs = document.getElementById('guesses');
                 let d = document.createElement('div');
@@ -110,8 +110,8 @@ class GameManager {
     }
     ready() {
         let gs = document.getElementById('guesses');
-	let righto = document.getElementById('correct');
-	righto.hidden = true;
+        let righto = document.getElementById('correct');
+        righto.hidden = true;
         gs.replaceChildren();
         let obj = {ready: 1, user: this.name};
         this.sock.send(JSON.stringify(obj));
