@@ -1,6 +1,6 @@
 
 
-HOST = 'ws://localhost:8765'
+HOST = 'ws://192.168.1.194:8765'
 
 
 var gm = null;
@@ -44,7 +44,7 @@ class GameManager {
                 thisViewModel.updateScores(dat.scores);
             }
             else if(t == 'skip') {
-                setUserSkipped(dat.name);
+                thisViewModel.setUserSkipped(dat.name);
             }
             else if(t == 'guess') {
                 thisViewModel.guessesList.push({
@@ -68,8 +68,8 @@ class GameManager {
         this.sock.send(JSON.stringify(obj));
     }
     ready() {
-        let righto = document.getElementById('correct');
-        righto.hidden = true;
+        //let righto = document.getElementById('correct');
+        //righto.hidden = true;
         let obj = {ready: 1, user: this.name};
         this.sock.send(JSON.stringify(obj));
     }

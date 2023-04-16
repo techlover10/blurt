@@ -14,7 +14,7 @@ def serve_static():
     os.chdir(web_dir)
 
     Handler = http.server.SimpleHTTPRequestHandler
-    httpd = socketserver.TCPServer(("", PORT), Handler)
+    httpd = socketserver.TCPServer(("0.0.0.0", PORT), Handler)
     print("serving static files at port", PORT)
     httpd.serve_forever()
 

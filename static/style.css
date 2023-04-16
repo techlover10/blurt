@@ -1,5 +1,45 @@
 body{
-    background-color:#cdcdcd;
+    background-color:#CFBDB4;
+}
+
+.btn-primary{
+    border:none;
+    background-color:#7061FF;
+}
+
+.btn-primary:hover{
+    background-color:#9185FF;
+}
+
+.btn-primary:active, .btn-primary:first-child:active{
+    background-color:#5A47FF;
+}
+
+.btn-success{
+    border:none;
+    background-color:#2ACB9D;
+}
+
+.btn-success:hover{
+    background-color:#34D5A8;
+}
+
+.btn-success:active, .btn-success:first-child:active{
+    background-color:#26BA90;
+}
+
+.btn-warning{
+    border:none;
+    color:white;
+    background-color:#DD6E42;
+}
+
+.btn-warning:hover{
+    background-color:#E07A52;
+}
+
+.btn-warning:active, .btn-warning:first-child:active{
+    background-color:#DA5F2F;
 }
 h1.banner{
 	font-family: Roboto;
@@ -9,21 +49,53 @@ h1.banner{
 
 .scores-block{
 }
+
+.point-winner{
+    position: absolute;
+    width: 100vw;
+    height: 90vh;
+    top: 0;
+    left: 0;
+    z-index: 99999;
+    pointer-events: none;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+}
+.point-winner-inner{
+    transform:translate(-50%, -50%);
+    top:50%;
+    left:50%;
+    position:absolute;
+    font-size:50px;
+    font-weight:700;
+    letter-spacing:6px;
+}
+
 .score-entry{
-	padding: 15px;
-	background: #dfdfdf;
+	padding: 25px 0 10px 0;
+	background: #D19C1D;
 	border-radius: 10px;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	box-shadow: 0 0 9px 5px #c3c3c3;
 	display:inline-block;
+    position:relative;
+}
+
+.skip-indicator{
+        position: absolute;
+    top: 0;
+    right: 0;
+    color: white;
+    background: #DD6E42;
+    padding: 4px 8px;
+    border-radius: 10px;
 }
 
 .username{
 	font-weight:600;
 	font-size:18px;
 	text-align:center;
-	background-color:green;
 	padding:6px;
 	border-radius:4px;
 	color:white;
@@ -33,6 +105,8 @@ h1.banner{
 	text-align:center;
 	font-size:30px;
 	font-weight:400;
+    width:150px;
+    color:white;
 
 }
 .main-game-box{
@@ -75,10 +149,11 @@ h1.banner{
 
 .question-display{
         position: relative;
-    padding: 20px;
+    padding: 30px;
     box-shadow: 0px 0px 20px 2px #c8c8c896;
     border-radius: 30px;
-    background-image: linear-gradient(147deg, #b5dbf8, #52d1e6);
+    background-color:#5A477F;
+    color:white;
     margin-bottom:10px;
 }
 
@@ -89,45 +164,118 @@ h1.banner{
 
 .guess-entry{
     position:relative;
-    margin:30px 0;
+    margin-bottom:50px;
 }
 .guesser{
-    background: #dbdbf4;
     padding: 2px 10px;
     position: absolute;
     border-radius: 15px;
-    top: -20px;
-    left: 5px;
-    box-shadow: 0px 0px 3px 2px #00000045;
+    top: 75px;
+    right:32px;
+    font-weight:600;
 }
 .guess{
-    background-image: linear-gradient(45deg, #00f82c, #6eff6b);
-    padding: 10px;
+    background-color: #78E3C5;
+    padding: 20px;
     border-radius: 10px;
-    text-align: center;
+    text-align: left;
     font-size: 20px;
+    text-transform:uppercase;
+}
+.guess:after{
+    transform: skewX(-15deg);
+    content: "";
+    position: absolute;
+    top: 100%;
+    right: 10px;
+    border-width: 17px 22px 0 0;
+    border-style: solid;
+    border-color: #78E3C5 transparent;
 }
 
 .answer-container{
     position:relative;
     margin:30px 0;
 }
-.answer-banner{
-	background: #4f4ff2;
+.curve-box-container{
+    overflow:hidden;
+    border-radius:10px;
+}
+.box-label-banner{
+        background: #7061FF;
     padding: 2px 10px;
     position: absolute;
-    border-radius: 15px;
-    top: -38px;
-    left: 5px;
-    box-shadow: 0px 0px 3px 2px #00000045;
-    font-size: 30px;
+    border-radius: 10px 0;
+    top:0;
+    left: 0px;
+    font-size: 25px;
     color: white;
     font-weight: 700;
+    box-shadow: 0 0 8px 0px #000000c2;
+    font-size:15px;
+}
+.answer-banner{
+    font-size: 25px;
 }
 .answer-text{
-    background-image: linear-gradient(45deg, #00f82c, #6eff6b);
+    background-color:#BBDDC6;
     padding: 10px;
     border-radius: 10px;
     text-align: center;
     font-size: 30px;
+    text-transform:uppercase;
+}
+
+
+
+/* Balloons */
+
+#balloon-container {
+  height: 100vh;
+  padding: 1em;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+  transition: opacity 500ms;
+}
+
+.balloon {
+  height: 125px;
+  width: 105px;
+  border-radius: 75% 75% 70% 70%;
+  position: relative;
+}
+
+.balloon:before {
+  content: "";
+  height: 75px;
+  width: 1px;
+  padding: 1px;
+  background-color: #FDFD96;
+  display: block;
+  position: absolute;
+  top: 125px;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.balloon:after {
+    content: "▲";
+    text-align: center;
+    display: block;
+    position: absolute;
+    color: inherit;
+    top: 120px;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+@keyframes float {
+  from {transform: translateY(100vh);
+  opacity: 1;}
+  to {transform: translateY(-300vh);
+  opacity: 0;}
 }

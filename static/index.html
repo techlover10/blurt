@@ -43,20 +43,22 @@
                     </div>
                 </div>
             </div>
-            <div id="ans" class="answer-container" data-bind="visible: gameState() == 'turnended'">
-                <div class="answer-banner">Answer:</div><div class="answer-text" data-bind='text: currentAnswer'></div>
+            <div id="ans" class="answer-container curve-box-container" data-bind="visible: gameState() == 'turnended'">
+                <div class="box-label-banner answer-banner">Answer:</div><div class="answer-text" data-bind='text: currentAnswer'></div>
             </div>
-            <div id="correct" data-bind="visible: gameState() == 'wonpoint'">✓</div>
+            <div id="correct" class="point-winner" data-bind="visible: showWinnerDiv()">
+            </div>
             <div class="row">
                 <div class="col-12 col-md-7 order-md-2">
                     <div id="mainGameBox" class="main-game-box" data-bind="visible: gameState() != 'init'">
                         <div id="ready" class="ready-overlay" data-bind="visible: waitingForUserConfirm()">
                             <button type="submit" class="btn btn-success btn-xl" value="ready"> <i class="fa-solid fa-check"></i> Ready!</button>
                         </div>
-                        <div class="question-display">
-                            <button type="submit" id="skip" class="btn btn-warning btn-xl" value="skip" data-bind="visible: showSkipButton()"><i class="fa-solid fa-forward"></i> Skip!</button>
+                            <button type="submit" id="skip" class="btn btn-warning btn-xl" value="skip" data-bind="visible: showSkipButton()"><i
+                                    class="fa-solid fa-forward"></i> Skip!</button>
+                        <div class="question-display curve-box-container">
                             <div id="clue" data-bind="visible: gameState() != 'init'">
-                                <div class="point-value">Points: <span data-bind="text: currentPointVal"></span></div>
+                                <div class="box-label-banner">Points: <span data-bind="text: currentPointVal"></span></div>
                                 <div class="clue-text" data-bind="text: currentClue"></div>
                             </div>
                         </div>
@@ -72,17 +74,18 @@
                     <div id="guesses" data-bind="visible: gameState() != 'init'">
                         <div data-bind="foreach: guessesList">
                             <div class="guess-entry">
-                                <div class="guesser"><span data-bind="text: name "></span> guessed...</div>
+                                <div class="guesser" data-bind="text:name"></div>
                                 <div class="guess" data-bind="text: guess"></div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-6 col-md-2 order-md-3">
-                    <div id="scores" class="scores-block" data-bind="visible: gameState() != 'init'">
-                        <div class="score-entry" data-bind="foreach: scoresList">
-                        <div class="username" data-bind="text: name"></div><div class="user-score" data-bind="text: score"></div>
-                        <div class="skip-indicator" data-bind="visible: userDidSkip"></div>
+                    <div id="scores" class="scores-block" data-bind="foreach: scoresList, visible: gameState() != 'init'">
+                        <div class="score-entry curve-box-container">
+                            <div class="username box-label-banner" data-bind="text: name"></div>
+                            <div class="user-score" data-bind="text: score"></div>
+                            <div class="skip-indicator" data-bind="visible: userDidSkip"><i class="fa-solid fa-forward"></i></div>
                         </div>
                     </div>
                 </div>

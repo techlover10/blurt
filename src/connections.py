@@ -28,7 +28,7 @@ class ConnectionManager:
             self.df = emptydf
         self.connections = set()
     async def _start_server(self):
-        async with websockets.serve(self.register, "localhost", 8765):
+        async with websockets.serve(self.register, "0.0.0.0", 8765):
             await asyncio.Future()
     def start_server(self):
         asyncio.run(self._start_server())
@@ -85,7 +85,7 @@ async def register(ws):
         connections.remove(ws)
 
 async def main():
-    async with websockets.serve(dispatch, "localhost", 8765):
+    async with websockets.serve(dispatch, "0.0.0.0", 8765):
         await asyncio.Future()
 
 
